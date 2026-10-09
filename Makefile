@@ -13,10 +13,12 @@ DLLIST_TEST := $(BUILD_DIR)/test_DLList
 ARRAYDEQUE_TEST := $(BUILD_DIR)/test_ArrayDeque
 UNIONFIND_TEST := $(BUILD_DIR)/test_UnionFind
 UNIONFIND_BENCH := $(BUILD_DIR)/test_UnionFind_bench
+BST_TEST := $(BUILD_DIR)/test_BST
+BSTMAP_TEST := $(BUILD_DIR)/test_BSTMap
 
 .PHONY: all test sanitize bench clean
 
-all: $(SLLIST_TEST) $(DLLIST_TEST) $(ARRAYDEQUE_TEST) $(UNIONFIND_TEST)
+all: $(SLLIST_TEST) $(DLLIST_TEST) $(ARRAYDEQUE_TEST) $(UNIONFIND_TEST) $(BST_TEST) $(BSTMAP_TEST)
 
 $(BUILD_DIR):
 	mkdir -p $(BUILD_DIR)
@@ -36,11 +38,19 @@ $(UNIONFIND_TEST): $(TEST_DIR)/test_UnionFind.cpp $(INCLUDE_DIR)/UnionFind.hpp |
 $(UNIONFIND_BENCH): $(TEST_DIR)/test_UnionFind.cpp $(INCLUDE_DIR)/UnionFind.hpp | $(BUILD_DIR)
 	$(CXX) $(BENCHFLAGS) $< -o $@
 
+$(BST_TEST): $(TEST_DIR)/test_BST.cpp $(INCLUDE_DIR)/BST.hpp | $(BUILD_DIR)
+	$(CXX) $(CXXFLAGS) $< -o $@
+
+$(BSTMAP_TEST): $(TEST_DIR)/test_BSTMap.cpp $(INCLUDE_DIR)/BSTMap.hpp | $(BUILD_DIR)
+	$(CXX) $(CXXFLAGS) $< -o $@
+
 test: all
 	./$(SLLIST_TEST)
 	./$(DLLIST_TEST)
 	./$(ARRAYDEQUE_TEST)
 	./$(UNIONFIND_TEST)
+	./$(BST_TEST)
+	./$(BSTMAP_TEST)
 
 sanitize: CXXFLAGS += $(SANFLAGS)
 sanitize: clean all
@@ -48,6 +58,8 @@ sanitize: clean all
 	./$(DLLIST_TEST)
 	./$(ARRAYDEQUE_TEST)
 	./$(UNIONFIND_TEST)
+	./$(BST_TEST)
+	./$(BSTMAP_TEST)
 
 bench: $(UNIONFIND_BENCH)
 	./$(UNIONFIND_BENCH)
